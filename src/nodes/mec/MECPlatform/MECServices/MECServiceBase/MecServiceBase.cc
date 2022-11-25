@@ -297,7 +297,7 @@ bool MecServiceBase::manageRequest()
             handleRequest(socket);
             simtime_t responseTime = simTime() - currentRequestMessageServed_->getArrivalTime();
             EV_INFO <<" MecServiceBase::manageRequest - Response time - " << responseTime << endl;
-            emit(responseTimeSignal_, responseTime);
+            //emit(responseTimeSignal_, responseTime);
         }
 
         if(currentRequestMessageServed_ != nullptr)
