@@ -59,7 +59,15 @@ void LteDrr::prepareSchedule()
         activeFlag = true;
         eligibleFlag = true;
         // Try to schedule as many PDUs as possible (or fragments thereof).
-        unsigned int scheduled = requestGrant (cid, desc.deficit_, terminateFlag, activeFlag, eligibleFlag);
+        unsigned int scheduled = 0;
+        try{
+            scheduled = requestGrant (cid, desc.deficit_, terminateFlag, activeFlag, eligibleFlag);
+        } catch(...){
+            activeTempList_.erase();          // remove from the active list
+                        activeConnectionTempSet_.erase(cid);
+                        carrierActiveConnectionSet_.erase(cid);
+            continue;
+        }
 
         if (desc.deficit_ - scheduled < 0)
             throw cRuntimeError("LteDrr::execSchedule CID:%d unexpected deficit value of %d", cid, desc.deficit_);
