@@ -27,6 +27,8 @@ simple TrafficGeneratorBase like ITrafficGenerator
         
         double startTimeDl @unit("s") = default(-1s);
         double startTimeUl @unit("s") = default(-1s);
+        double stopTimeDl @unit("s") = default(-1s);
+        double stopTimeUl @unit("s") = default(-1s);
         
         //# TODO check parameters
         int headerLen @unit(B) = default(33B); 

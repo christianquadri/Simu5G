@@ -41,6 +41,9 @@ void TrafficGeneratorBase::initialize(int stage)
         // calculating traffic starting time
         startTime_[DL] = par("startTimeDl");
         startTime_[UL] = par("startTimeUl");
+        // calculating traffic starting time
+        stopTime_[DL] = par("stopTimeDl");
+        stopTime_[UL] = par("stopTimeUl");
 
         headerLen_ = par("headerLen");
         txPower_ = par("txPower");
@@ -143,8 +146,9 @@ void TrafficGeneratorBase::handleMessage(cMessage *msg)
             }
 
             // generate new traffic in 'offset' seconds
-            simtime_t offset = getNextGenerationTime(DL);
-            scheduleAt(simTime()+offset, selfSource_[DL]);
+            if (stopTime_[DL] < 0 || stopTime_[DL] > simTime()){
+                scheduleAfter(getNextGenerationTime(DL), selfSource_[DL]);
+            }
         }
         else if (!strcmp(msg->getName(), "selfSourceUl"))
         {
@@ -156,8 +160,9 @@ void TrafficGeneratorBase::handleMessage(cMessage *msg)
             }
 
             // generate new traffic in 'offset' seconds
-            simtime_t offset = getNextGenerationTime(UL);
-            scheduleAt(simTime()+offset, selfSource_[UL]);
+            if (stopTime_[UL] < 0 || stopTime_[UL] > simTime()){
+                scheduleAfter(getNextGenerationTime(UL), selfSource_[UL]);
+            }
         }
         else if (!strcmp(msg->getName(), "rtxNotification"))
         {
@@ -252,7 +257,7 @@ unsigned int TrafficGeneratorBase::consumeBytes(int bytes, Direction dir, bool r
     Enter_Method_Silent("TrafficGeneratorBase::consumeBytes");
 
     if (dir != DL && dir != UL)
-       throw cRuntimeError("TrafficGeneratorBase::consumeBytes - unrecognized direction: %d" , dir);
+        throw cRuntimeError("TrafficGeneratorBase::consumeBytes - unrecognized direction: %d" , dir);
 
     if (!rtx)
     {

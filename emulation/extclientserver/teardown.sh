@@ -11,5 +11,6 @@
 
 
 # delete namespaces
-sudo ip netns del ns1
+#sudo ip netns del ns1
+sudo ip tuntap del mode tap dev tapa
 sudo ip netns del ns2

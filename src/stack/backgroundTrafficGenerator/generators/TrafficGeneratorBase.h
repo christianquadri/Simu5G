@@ -39,6 +39,9 @@ class TrafficGeneratorBase : public cSimpleModule, public cListener
     // starting time for DL and UL traffic
     simtime_t startTime_[2];
 
+    // stopping time for DL and UL traffic
+    simtime_t stopTime_[2];
+
     bool trafficEnabled_[2];
 
     // total length of above-the-MAC-layer headers
